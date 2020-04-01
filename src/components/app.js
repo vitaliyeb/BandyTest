@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import Article from "./article/article";
+import './app.styl';
 
 class App extends Component{
-
     render() {
         return (
-            <h1>Hello React </h1>
+            <div className='app'>
+                <Article />
+            </div>
         )
     }
 }
