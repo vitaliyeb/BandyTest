@@ -1,0 +1,19 @@
+{
+  "name": "bandytest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitaliyeb/BandyTest.git"
+  },
+  "author": "VitaliyEb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vitaliyeb/BandyTest/issues"
+  },
+  "homepage": "https://github.com/vitaliyeb/BandyTest#readme"
+}
