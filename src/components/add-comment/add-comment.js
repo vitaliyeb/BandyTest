@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {addComment} from "../../actions/actions";
 import './add-comment.styl'
 
 class AddComment extends Component{
@@ -11,11 +13,13 @@ class AddComment extends Component{
         };
         this.addComment = (e) => {
             e.preventDefault();
-            if (!this.state.email.replace(/\s+/g,'').length) return null;
+            let { addComment, id } = this.props;
+            let { name, email, comment } = this.state;
+            //if (!email.replace(/\s+/g,'').length) return null;
+            let newId = (Math.floor(Math.random()*500)+1);
+            return addComment(name, email, comment, id.concat(newId));
         };
-
     }
-
     setInput(e, property){
         let state = this.state,
             value = e.target.value;
@@ -23,7 +27,8 @@ class AddComment extends Component{
     }
 
     render() {
-        let {name, email, comment} = this.state;
+        let { name, email, comment }  = this.state;
+
         return(
             <form className='add-comment' onSubmit={this.addComment}>
                 <p className='add-comment__heading'>Добавить комментарий</p>
@@ -47,4 +52,7 @@ class AddComment extends Component{
     }
 }
 
-export default AddComment;
+let mapDispatchToProps = {
+    addComment
+};
+export default connect(null, mapDispatchToProps)(AddComment);

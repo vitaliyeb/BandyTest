@@ -9,10 +9,10 @@ class CommentsList extends Component{
         let {comments} = this.props;
 
         let allComments = comments.map(comment => {
-            return < Comment key={comment.id} {...comment} />
+            return < Comment key={comment.id.toString()} {...comment} />
         });
 
-        console.log(comments)
+        console.log(comments);
         return (
             <div className='comments-list'>
                 <p className='comments-list__title'>Комментарии:</p>

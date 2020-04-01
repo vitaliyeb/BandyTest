@@ -5,8 +5,11 @@ import userAvatar from './user.png';
 
 class Comment extends Component{
     render() {
-        let {nestedComments, name, email, comment} = this.props,
-            showComments = nestedComments.length ? nestedComments.map((comment)=> <Comment key={comment.id} {...comment} />) : null;
+        let {nestedComments, name, email, comment, id, isAnswer } = this.props,
+            additional = <AddComment id={id} />;
+
+
+        if (!isAnswer) additional = nestedComments.length ? nestedComments.map((comment)=> <Comment key={comment.id.toString()} {...comment} />) : null;
 
         return(
           <div className='comment'>
@@ -21,7 +24,7 @@ class Comment extends Component{
                   <p className='comment-other__text'>
                       { comment }
                   </p>
-                  { showComments }
+                  { additional }
               </div>
           </div>
         );
