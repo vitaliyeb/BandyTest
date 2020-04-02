@@ -1,6 +1,7 @@
 const ADD_COMMENT = 'ADD_COMMENT';
 const RESPONSE_COMMENT = 'RESPONSE_COMMENT';
 const UPDATE_RATING = 'UPDATE_RATING';
+const UPDATE_HIDDEN_COMMENT = 'UPDATE_HIDDEN_COMMENT';
 
 const addComment = (name, email, comment, newId, id) => ({
     type: ADD_COMMENT,
@@ -18,9 +19,14 @@ const updateRating = (newRating, id) => ({
     newRating,
     id
 });
+const updateHiddenComment = (id) => ({
+    type: UPDATE_HIDDEN_COMMENT,
+    id: id
+});
 
 export {
     addComment,
     responseComment,
-    updateRating
+    updateRating,
+    updateHiddenComment
 }

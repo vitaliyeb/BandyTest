@@ -11,16 +11,19 @@ const initialState = {
             email: 'vlvlv.vovov@bk.ru',
             comment: commentTextDefault.concat(commentTextDefault),
             rating: 5,
+            isHidden: false,
             id: [12],
             nestedComments:[
                 {
                     id: [12, 127],
                     name: 'Анна Шумкова',
                     rating: 7,
+                    isHidden: false,
                     nestedComments: [
                             {
                                 id: [12, 127, 123],
                                 name: 'Константин Штыков',
+                                isHidden: false,
                                 rating: 9,
                                 nestedComments: []
                             }
@@ -31,8 +34,9 @@ const initialState = {
         {
             name: 'Виталий Бурдин',
             email: 'vlvlv.vovov@bk.ru',
-            rating: -5,
+            rating: -10,
             comment: commentTextDefault,
+            isHidden: true,
             id: [44],
             nestedComments:[]
         }
@@ -47,6 +51,7 @@ const reducer = (state = initialState,  actions) => {
                 name,
                 email,
                 rating: 0,
+                isHidden: false,
                 comment,
                 id: newId,
                 nestedComments:[]
@@ -81,19 +86,19 @@ const reducer = (state = initialState,  actions) => {
             function updateRating(comments, newRating, idComment, idIndex){
                 let sliceIndex = comments.findIndex((el)=> el.id[idIndex] === idComment[idIndex]);
 
-
                 if (!(idComment.length === idIndex+1)){
                     return [
                         ...comments.slice(0, sliceIndex),
                         {
                             ...comments[sliceIndex],
-                            nestedComments: updateRating(comments[sliceIndex].nestedComments, newRating, idComment, ++idIndex )
+                            nestedComments: updateRating(comments[sliceIndex].nestedComments, newRating, idComment, ++idIndex ),
                         },
                         ...comments.slice(sliceIndex+1)
                     ]
                 }
 
                 comments[sliceIndex]['rating'] = newRating;
+                comments[sliceIndex]['isHidden'] = (newRating < -9) ? true : false;
 
                 return [
                     ...comments.slice(0, sliceIndex),
@@ -104,6 +109,35 @@ const reducer = (state = initialState,  actions) => {
             return {
                 ...state,
                 comments: updateRating([...state.comments], newRating, id, 0)
+            };
+        case 'UPDATE_HIDDEN_COMMENT':
+
+            function updateHidden(comments, hiddenProperty, idComment, idIndex){
+                let sliceIndex = comments.findIndex((el)=> el.id[idIndex] === idComment[idIndex]);
+
+                if (!(idComment.length === idIndex+1)){
+                    return [
+                        ...comments.slice(0, sliceIndex),
+                        {
+                            ...comments[sliceIndex],
+                            nestedComments: updateRating(comments[sliceIndex].nestedComments, newRating, idComment, ++idIndex ),
+                        },
+                        ...comments.slice(sliceIndex+1)
+                    ]
+                }
+
+                comments[sliceIndex]['isHidden'] = false;
+
+                return [
+                    ...comments.slice(0, sliceIndex),
+                    comments[sliceIndex],
+                    ...comments.slice(sliceIndex+1)
+                ];
+            }
+
+            return {
+                ...state,
+                comments: updateHidden(state.comments, false, actions.id, 0)
             };
         default:
             return state;
