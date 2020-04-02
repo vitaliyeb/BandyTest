@@ -15,7 +15,7 @@ class AddComment extends Component{
             e.preventDefault();
             let { addComment, id } = this.props;
             let { name, email, comment } = this.state;
-            //if (!email.replace(/\s+/g,'').length) return null;
+            if (!email.replace(/\s+/g,'').length) return null;
             let newId = (Math.floor(Math.random()*500)+1);
             return addComment(name, email, comment, id.concat(newId));
         };

@@ -2,21 +2,21 @@ let commentTextDefault = 'Lorem ipsum dolor sit amet, consectetur adipisicing el
 
 
 const initialState = {
+    findingAddCommentForm : [],
     comments: [
         {
             name: 'Виталий Бурдин',
             email: 'vlvlv.vovov@bk.ru',
             comment: commentTextDefault.concat(commentTextDefault),
-            isAnswer: false,
             id: [12],
             nestedComments:[
                 {
                     id: [12, 127],
-                    isAnswer: false,
+                    name: 'Анна Шумкова',
                     nestedComments: [
                             {
                                 id: [12, 127, 123],
-                                isAnswer: false,
+                                name: 'Константин Штыков',
                                 nestedComments: []
                             }
                         ]
@@ -27,7 +27,6 @@ const initialState = {
             name: 'Виталий Бурдин',
             email: 'vlvlv.vovov@bk.ru',
             comment: commentTextDefault,
-            isAnswer: true,
             id: [44],
             nestedComments:[]
         }
@@ -42,7 +41,6 @@ const reducer = (state = initialState,  actions) => {
                 name,
                 email,
                 comment,
-                isAnswer: false,
                 id: newId,
                 nestedComments:[]
             };
@@ -59,13 +57,17 @@ const reducer = (state = initialState,  actions) => {
                 }
                 return [...comments, newComment];
             }
-
-
             let comments = updateComments([...state.comments], newComment, 0);
-
+            return {
+                findingAddCommentForm: [],
+                comments
+            };
+        case 'RESPONSE_COMMENT':
+            let { idComment } = actions;
+            console.log(idComment);
             return {
                 ...state,
-                comments
+                findingAddCommentForm: idComment
             };
         default:
             return state;
