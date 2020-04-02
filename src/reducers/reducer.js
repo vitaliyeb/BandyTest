@@ -2,6 +2,31 @@ import rating from "../components/rating/rating";
 
 let commentTextDefault = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi esse expedita facilis fuga itaque laudantium molestiae placeat, praesentium quae quia quisquam sequi voluptatem. Autem, eligendi illum perferendis repellat veniam voluptatem.';
 
+function updateCommentProperty (comments, objNewProperty, idComment, indexId){
+    let sliceIndex = comments.findIndex((el)=> el.id[indexId] === idComment[indexId]);
+
+    if (!(idComment.length === indexId+1)){
+        return [
+            ...comments.slice(0, sliceIndex),
+            {
+                ...comments[sliceIndex],
+                nestedComments: updateCommentProperty(comments[sliceIndex].nestedComments, objNewProperty, idComment, ++indexId ),
+            },
+            ...comments.slice(sliceIndex+1)
+        ]
+    }
+
+    let newComment = {
+        ...comments[sliceIndex],
+        ...objNewProperty
+    };
+
+    return [
+        ...comments.slice(0, sliceIndex),
+        newComment,
+        ...comments.slice(sliceIndex+1)
+    ];
+}
 
 const initialState = {
     findingAddCommentForm : [],
@@ -83,61 +108,19 @@ const reducer = (state = initialState,  actions) => {
             };
         case 'UPDATE_RATING':
             let {newRating, id} = actions;
-            function updateRating(comments, newRating, idComment, idIndex){
-                let sliceIndex = comments.findIndex((el)=> el.id[idIndex] === idComment[idIndex]);
+            let updateProperty = {
+                rating: newRating,
+                isHidden: newRating < -9 ? true : false
+            };
 
-                if (!(idComment.length === idIndex+1)){
-                    return [
-                        ...comments.slice(0, sliceIndex),
-                        {
-                            ...comments[sliceIndex],
-                            nestedComments: updateRating(comments[sliceIndex].nestedComments, newRating, idComment, ++idIndex ),
-                        },
-                        ...comments.slice(sliceIndex+1)
-                    ]
-                }
-
-                comments[sliceIndex]['rating'] = newRating;
-                comments[sliceIndex]['isHidden'] = (newRating < -9) ? true : false;
-
-                return [
-                    ...comments.slice(0, sliceIndex),
-                    comments[sliceIndex],
-                    ...comments.slice(sliceIndex+1)
-                ];
-            }
             return {
                 ...state,
-                comments: updateRating([...state.comments], newRating, id, 0)
+                comments: updateCommentProperty([...state.comments], updateProperty, id, 0)
             };
         case 'UPDATE_HIDDEN_COMMENT':
-
-            function updateHidden(comments, hiddenProperty, idComment, idIndex){
-                let sliceIndex = comments.findIndex((el)=> el.id[idIndex] === idComment[idIndex]);
-
-                if (!(idComment.length === idIndex+1)){
-                    return [
-                        ...comments.slice(0, sliceIndex),
-                        {
-                            ...comments[sliceIndex],
-                            nestedComments: updateRating(comments[sliceIndex].nestedComments, newRating, idComment, ++idIndex ),
-                        },
-                        ...comments.slice(sliceIndex+1)
-                    ]
-                }
-
-                comments[sliceIndex]['isHidden'] = false;
-
-                return [
-                    ...comments.slice(0, sliceIndex),
-                    comments[sliceIndex],
-                    ...comments.slice(sliceIndex+1)
-                ];
-            }
-
             return {
                 ...state,
-                comments: updateHidden(state.comments, false, actions.id, 0)
+                comments: updateCommentProperty(state.comments, {isHidden: false}, actions.id, 0)
             };
         default:
             return state;
