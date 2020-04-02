@@ -35,6 +35,7 @@ const initialState = {
             name: 'Виталий Бурдин',
             email: 'vlvlv.vovov@bk.ru',
             comment: commentTextDefault.concat(commentTextDefault),
+            timePublic: new Date(2020, 0, 15).valueOf(),
             rating: 5,
             isHidden: false,
             id: [12],
@@ -42,6 +43,7 @@ const initialState = {
                 {
                     id: [12, 127],
                     name: 'Анна Шумкова',
+                    timePublic: new Date(2020, 1, 20).valueOf(),
                     rating: 7,
                     isHidden: false,
                     nestedComments: [
@@ -49,6 +51,7 @@ const initialState = {
                                 id: [12, 127, 123],
                                 name: 'Константин Штыков',
                                 isHidden: false,
+                                timePublic: new Date(2020, 3, 1).valueOf(),
                                 rating: 9,
                                 nestedComments: []
                             }
@@ -61,6 +64,7 @@ const initialState = {
             email: 'vlvlv.vovov@bk.ru',
             rating: -10,
             comment: commentTextDefault,
+            timePublic: new Date(2020, 3, 2).valueOf(),
             isHidden: true,
             id: [44],
             nestedComments:[]
@@ -78,6 +82,7 @@ const reducer = (state = initialState,  actions) => {
                 rating: 0,
                 isHidden: false,
                 comment,
+                timePublic: new Date().valueOf(),
                 id: newId,
                 nestedComments:[]
             };
