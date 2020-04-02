@@ -1,3 +1,5 @@
+import rating from "../components/rating/rating";
+
 let commentTextDefault = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi esse expedita facilis fuga itaque laudantium molestiae placeat, praesentium quae quia quisquam sequi voluptatem. Autem, eligendi illum perferendis repellat veniam voluptatem.';
 
 
@@ -8,15 +10,18 @@ const initialState = {
             name: 'Виталий Бурдин',
             email: 'vlvlv.vovov@bk.ru',
             comment: commentTextDefault.concat(commentTextDefault),
+            rating: 5,
             id: [12],
             nestedComments:[
                 {
                     id: [12, 127],
                     name: 'Анна Шумкова',
+                    rating: 7,
                     nestedComments: [
                             {
                                 id: [12, 127, 123],
                                 name: 'Константин Штыков',
+                                rating: 9,
                                 nestedComments: []
                             }
                         ]
@@ -26,6 +31,7 @@ const initialState = {
         {
             name: 'Виталий Бурдин',
             email: 'vlvlv.vovov@bk.ru',
+            rating: -5,
             comment: commentTextDefault,
             id: [44],
             nestedComments:[]
@@ -40,6 +46,7 @@ const reducer = (state = initialState,  actions) => {
             let newComment = {
                 name,
                 email,
+                rating: 0,
                 comment,
                 id: newId,
                 nestedComments:[]
@@ -68,6 +75,35 @@ const reducer = (state = initialState,  actions) => {
             return {
                 ...state,
                 findingAddCommentForm: idComment
+            };
+        case 'UPDATE_RATING':
+            let {newRating, id} = actions;
+            function updateRating(comments, newRating, idComment, idIndex){
+                let sliceIndex = comments.findIndex((el)=> el.id[idIndex] === idComment[idIndex]);
+
+
+                if (!(idComment.length === idIndex+1)){
+                    return [
+                        ...comments.slice(0, sliceIndex),
+                        {
+                            ...comments[sliceIndex],
+                            nestedComments: updateRating(comments[sliceIndex].nestedComments, newRating, idComment, ++idIndex )
+                        },
+                        ...comments.slice(sliceIndex+1)
+                    ]
+                }
+
+                comments[sliceIndex]['rating'] = newRating;
+
+                return [
+                    ...comments.slice(0, sliceIndex),
+                    comments[sliceIndex],
+                    ...comments.slice(sliceIndex+1)
+                ];
+            }
+            return {
+                ...state,
+                comments: updateRating([...state.comments], newRating, id, 0)
             };
         default:
             return state;
