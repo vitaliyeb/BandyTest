@@ -46,11 +46,15 @@ const initialState = {
                     timePublic: new Date(2020, 1, 20).valueOf(),
                     rating: 7,
                     isHidden: false,
+                    email: 'as.vovov@bk.ru',
+                    comment: commentTextDefault,
                     nestedComments: [
                             {
                                 id: [12, 127, 123],
                                 name: 'Константин Штыков',
                                 isHidden: false,
+                                email: 'vlvlv.asdasd@bk.ru',
+                                comment: commentTextDefault,
                                 timePublic: new Date(2020, 3, 1).valueOf(),
                                 rating: 9,
                                 nestedComments: []
@@ -61,7 +65,7 @@ const initialState = {
         },
         {
             name: 'Виталий Бурдин',
-            email: 'vlvlv.vovov@bk.ru',
+            email: 'vlvlv.dd@bk.ru',
             rating: -10,
             comment: commentTextDefault,
             timePublic: new Date(2020, 3, 2).valueOf(),
